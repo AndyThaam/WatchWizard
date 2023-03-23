@@ -4,7 +4,7 @@ const useGenre = (selectedGenres) => {
   
     const GenreIds = selectedGenres.map((g) => g.id);
     console.log(GenreIds)
-  
+    return GenreIds.reduce((acc, curr) => acc + "," + curr);
   };
   
   export default useGenre;

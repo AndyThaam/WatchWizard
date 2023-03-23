@@ -6,7 +6,7 @@ import{ SearchIcon,
 } from "@heroicons/react/outline";
 
 import Genre from "components/Genre";
-import {useGenre} from '../hooks/useGenre'
+import useGenre from "hooks/useGenre.js";
 
 import ProviderLogo from '../components/ProviderLogo'
 import Index from "../pages/index"

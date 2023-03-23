@@ -1,0 +1,155 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap");
+
+.ContentModal__landscape {
+  object-fit: contain;
+  border-radius: 10px;
+  height : 60%;
+  width: 95%;
+  padding:8px
+}
+
+.ContentModal__portrait {
+  display: none;
+  object-fit: fill;
+  border-radius: 1px;
+  height : 40%;
+  width: 30%;
+  overflow-y: scroll;
+  margin-left:10px;
+  margin-top:10px;
+
+
+
+}
+
+.tagline {
+  padding: 2px;
+  align-self: center;
+  font-size: 12px;
+}
+
+.ContentModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.ContentModal::-webkit-scrollbar {
+  display: none;
+}
+
+.ContentModal__about {
+  margin-left:-10px;
+  flex-grow: 1;
+  margin-top: -80px;
+  padding: 15px;
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+
+  font-weight: 600;
+  
+}
+
+.ContentModal__title {
+  flex-direction: column;
+  margin-top: -0px;
+  height:40;
+  font-size: 17px;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.textHead {
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: Gotham;
+  color: "white";
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+
+}
+
+.ContentModal__description {
+
+  display: flex;
+  margin:20px;
+  height:20%;
+  width:100%;
+  overflow-y: scroll;
+  padding: 40px;
+  border-radius: 50px ;
+  scrollbar-width: thin; /* Firefox */
+  font-size: 11px;
+ 
+  text-align: justify;
+  
+}
+
+.ContentModal__description::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .ContentModal__landscape {
+    display: none;
+    overflow-y: scroll;
+    padding:5px;
+    margin-left:5px;
+  }
+  .ContentModal__portrait {
+    display: flex;
+    width: 100%;
+    overflow-y: scroll;
+  }
+  .ContentModal {
+    flex-direction: row;
+  
+    padding: 10px 0;
+    overflow-y: scroll;
+  }
+  .ContentModal__about {
+    flex-grow: 1;
+    margin-top: -8px;
+    width: 85%;
+    padding: 1;
+    height: 100%;
+    margin-left:3px;
+  }
+  .ContentModal__title {
+    font-size: 2vw;
+  }
+  .ContentModal__description {
+    margin-top: -20px;
+    font-size: 13px;
+    height:5%;
+  }
+
+  .textHead {
+    
+  font-size: 1.25rem;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  color: "white";
+
+  
+  }
+  .textHead1 {
+    
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    color: "white";
+  
+    
+    }
+}

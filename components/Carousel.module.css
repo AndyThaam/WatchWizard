@@ -1,0 +1,49 @@
+.carouselItem {
+    display: flex;
+    flex-direction: column;
+    
+    padding: 6px;
+    height : 5%;
+  }
+  .carouselItem__img {
+    border-radius: 5px;
+    margin-bottom: 0px;
+    
+  }
+
+  .carouselItem__txt{
+    font-size: 10px;
+    margin-top: 7px;
+  }
+
+  @media (min-width: 700px) {
+    .carouselItem {
+      display: flex;
+      flex-direction: column;
+      
+      padding: 6px;
+      height : 5%;
+    }
+    .carouselItem__img {
+      border-radius: 5px;
+      margin-bottom: 0px;
+      max-width: 100%;
+      height: 1%;
+
+      
+    }
+
+    .FcarouselItem__img {
+      border-radius: 5px;
+      margin-bottom: 0px;
+      max-width: 160px;
+      
+
+      
+    }
+  
+    .carouselItem__txt{
+      font-size: 13px;
+      margin-top: 7px;
+    }
+  }

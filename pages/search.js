@@ -6,7 +6,7 @@ import{ SearchIcon,
 } from "@heroicons/react/outline";
 
 import Genre from "components/Genre";
-
+import {useGenre} from '../hooks/useGenre'
 
 import ProviderLogo from '../components/ProviderLogo'
 import Index from "../pages/index"
@@ -18,7 +18,9 @@ function Search() {
   const [content, setContent] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [genres, setGenres] = useState([]);
+
   const genreforURL = useGenre(selectedGenres)
+
   const [watches, setWatch] = useState([]);
   const [selectedWatch, setSelectedWatch] = useState([]);
 

@@ -24,7 +24,7 @@ import {
 
 
 import styles from './ContentModal.module.css'
-
+import SingleContent from './SingleContent/SingleContent';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import Carousel from '../components/Carousel.js';
 import FCarousel from '../components/RelatedFCarousel.js';
@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ContentModal({children,media_type,id,poster}) {
   const classes = useStyles();
+  const [type, setType] = useState(0);
   const [open, setOpen] = React.useState(false);
   const [content,setContent]= useState();
   const [watch,setWatch] =useState([]);
@@ -63,25 +64,27 @@ export default function ContentModal({children,media_type,id,poster}) {
   const handleClose = () => setOpen(false);
 
   const fetchData = async () => {
-    const mediaType = media_type || "discover";
+    const mediaType = media_type 
     const { data } = await axios.get(
-      `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
+      `https://api.themoviedb.org/3/${type ? "tv" : "movie"}/${id}?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
+
     );
     setContent(data);
+    console.log(data,"mediadatatest")
   };
   
   const fetchWatch = async () => {
-    const mediaType = media_type || "discover";
+    const mediaType = media_type 
     const { data } = await axios.get(
-      `https://api.themoviedb.org/3/${mediaType}/${id}/watch/providers?api_key=a89d091cb78954f6a26c74461aef889a&watch_region=US&language=en-US&include_adult=false&with_original_language=en`
+      `https://api.themoviedb.org/3/${type ? "tv" : "movie"}/${id}/watch/providers?api_key=a89d091cb78954f6a26c74461aef889a&watch_region=US&language=en-US&include_adult=false&with_original_language=en`
     );
     setWatch(data);
   };
   
   const fetchVideo = async () => {
-    const mediaType = media_type || "discover";
+    const mediaType = media_type 
     const { data } = await axios.get(
-      `https://api.themoviedb.org/3/${mediaType}/${id}/videos?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
+      `https://api.themoviedb.org/3/${type ? "tv" : "movie"}/${id}/videos?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
     );
     setVideo(data.results[0]?.key);
   };

@@ -12,6 +12,8 @@ import ProviderLogo from '../components/ProviderLogo'
 import Index from "../pages/index"
 
 function Search() {
+  const [type, setType] = useState(0);
+
   const [page, setPage] = useState(1);
   const [numOfPages, setnumOfPages] = useState();
   const [ searchText,setSearchText,] = useState("")
@@ -65,21 +67,37 @@ function Search() {
   const watchProvider = useWatch(selectedWatch);
 
 
-  const fetchSearch = async  () => {
-    try{
-      const{ data } = await axios.get(
-        `https://api.themoviedb.org/3/search/multi?api_key=a89d091cb78954f6a26c74461aef889a&query=${searchText}&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchProvider}&watch_region=US`
-        )
-        setContent(data.results)
-        setnumOfPages(data.total_pages)
-        setSearchText(data.searchText)
-      } catch(error) {
-        console.error(error)
-      }
+  // const fetchSearch = async  () => {
+  //   try{
+  //     const{ data } = await axios.get(
+  //       `https://api.themoviedb.org/3/search/multi?api_key=a89d091cb78954f6a26c74461aef889a&query=${searchText}&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchProvider}&watch_region=US`
+  //       )
+  //       console.log(data,"search")
+  //       setContent(data.results)
+  //       setnumOfPages(data.total_pages)
+  //       setSearchText(data.searchText)
+  //     } catch(error) {
+  //       console.error(error)
+  //     }
+  // }
+
+  const fetchSearch = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://api.themoviedb.org/3/search/${type ? "tv" : "movie"}?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&query=${searchText}&page=${page}&include_adult=false`
+      );
+      setContent(data.results);
+      setNumOfPages(data.total_pages);
+      // console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   }
+
+  
     useEffect(() => {
     window.scroll(0,0)
-    fetchSearch()
+  fetchSearch()
    },[genreforURL,watchProvider,searchText,page])
   
 
@@ -132,7 +150,7 @@ function Search() {
       poster = {c.poster_path} 
       title = {c.title || c.name} 
       date = {c.first_air_date|| c.release_date}
-      media_type = {c.media_type} 
+      media_type = {type ?  "tv":"movie"} 
       vote_average = {c.vote_average}
          /> )} 
       </div>

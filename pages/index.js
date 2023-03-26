@@ -9,8 +9,6 @@ import SingleContent from '../components/SingleContent/SingleContent';
 
 
 export default function Home() {
-
-  
   return (
     <div className="">
       <Head>

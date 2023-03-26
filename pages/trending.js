@@ -69,32 +69,41 @@ const useWatch = (selectedWatch) => {
   const [selectedWatch, setSelectedWatch] = useState([]);
   const watchProvider = useWatch(selectedWatch);
   
-let results = []
+// let results = []
 
-    const fetchTrendingMovie= async () => {
-        const { data } = await axios.get(
-        `https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchProvider}&watch_region=US`
+//     const fetchTrendingMovie= async () => {
+//         const { data } = await axios.get(
+//         `https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchProvider}&watch_region=US`
  
-        );
-        return data.results;
-      };
+//         );
+//         return data.results;
+//       };
 
-      const fetchTrendingSeries= async () => {
-        const { data } = await axios.get(
-          `https://api.themoviedb.org/3/discover/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchProvider}&watch_region=US`
+//       const fetchTrendingSeries= async () => {
+//         const { data } = await axios.get(
+//           `https://api.themoviedb.org/3/discover/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchProvider}&watch_region=US`
           
-          );
-          return data.results;
-      };
+//           );
+//           return data.results;
+//       };
 
-      const combineBoth = () => {
-        Promise.all([fetchTrendingSeries(), fetchTrendingMovie()]).then(([movies, tv]) => {
-          results = [...movies,...tv].sort((a, b) => b.popularity - a.popularity);
-          console.log(results);
-          setNumOfPages(results.total_pages);
-          setContent(results);
-        });
-      }
+//       const combineBoth = () => {
+//         Promise.all([fetchTrendingSeries(), fetchTrendingMovie()]).then(([movies, tv]) => {
+//           results = [...movies,...tv].sort((a, b) => b.popularity - a.popularity);
+//           console.log(results);
+//           setNumOfPages(results.total_pages);
+//           setContent(results);
+//         });
+//       }
+
+const fetchTrending= async () => {
+  const { data } = await axios.get(
+  `https://api.themoviedb.org/3/trending/all/week?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}&with_genres=${genreforURL}}&with_watch_providers=${watchProvider}&watch_region=US`
+    );
+    console.log(data , "test13232")
+    setContent(data.results)
+    setNumOfPages(data.total_pages);
+  }
 
 
 
@@ -103,13 +112,32 @@ let results = []
 
 
       useEffect(() => {
-        fetchTrendingMovie
-        fetchTrendingSeries
-        combineBoth();
+      fetchTrending()
+       ;
     } , [watchProvider,genreforURL,page]);
 
   return (
     <> <Index /> 
+    <div className="m-4 flex   px-5 " >
+        <ProviderLogo className =  "  w-1 m-5 px-5   "
+        
+        selectedWatch={selectedWatch}
+        setSelectedWatch={setSelectedWatch}
+        watches={watches}
+        setWatch={setWatch}
+        setPage={setPage}
+          disableUnderline 
+        
+      />
+        <Genre className = "m-5 px-5"
+        type="movie"
+        selectedGenres={selectedGenres}
+        setSelectedGenres={setSelectedGenres}
+        genres={genres}
+        setGenres={setGenres}
+        setPage={setPage}
+      />
+          </div>
    
     <div>
       <div className='flex flex-grow  justify-evenly flex-wrap '>

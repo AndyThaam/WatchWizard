@@ -1,7 +1,8 @@
 
 module.exports = {
+  
   images: {
-    domains: ["image.tmdb.org","www.freepnglogos.com"]
+    domains: ["image.tmdb.org","www.freepnglogos.com"],
 
   },
  

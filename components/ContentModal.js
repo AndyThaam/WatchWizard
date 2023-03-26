@@ -18,6 +18,7 @@ import {
   img_300,
   img_500,
   unavailable,
+  unavailableLandscape 
   
 } from '../config.js/config.js'
 
@@ -62,33 +63,28 @@ export default function ContentModal({children,media_type,id,poster}) {
   const handleClose = () => setOpen(false);
 
   const fetchData = async () => {
-    const {data} = await axios.get(
-        `https://api.themoviedb.org/3/${media_type}/${id}?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`)
-        setContent(data)
-        console.log(data ,"tet")
-       
-  }
-
+    const mediaType = media_type || "discover";
+    const { data } = await axios.get(
+      `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
+    );
+    setContent(data);
+  };
+  
   const fetchWatch = async () => {
-    const {data} = await axios.get(
-        `https://api.themoviedb.org/3/${media_type}/${id}/watch/providers?api_key=a89d091cb78954f6a26c74461aef889a&watch_region=US&language=en-US&include_adult=false&with_original_language=en`)
-        setWatch(data)
-        console.log(data ,"watch")
-        
-
-        
-      
-     
-  }
- 
- 
-
+    const mediaType = media_type || "discover";
+    const { data } = await axios.get(
+      `https://api.themoviedb.org/3/${mediaType}/${id}/watch/providers?api_key=a89d091cb78954f6a26c74461aef889a&watch_region=US&language=en-US&include_adult=false&with_original_language=en`
+    );
+    setWatch(data);
+  };
+  
   const fetchVideo = async () => {
-    const {data} = await axios.get(
-        `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`)
-        console.log(data.results) 
-        setVideo(data.results[0]?.key)
-  } 
+    const mediaType = media_type || "discover";
+    const { data } = await axios.get(
+      `https://api.themoviedb.org/3/${mediaType}/${id}/videos?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
+    );
+    setVideo(data.results[0]?.key);
+  };
 
   useEffect(() => {
     fetchData()
@@ -205,19 +201,6 @@ export default function ContentModal({children,media_type,id,poster}) {
                     </span>
 
                   
-                      <span className='flex-row flex sm:flex ' >Available on: 
-                      {Object.values(watch.results).map((item) => (
-                      Object.values(item).map((obj) => (
-                        Object.values(obj).map((company) => (
-                      <img 
-                          className='cursor-pointer flex-row  
-                          px-2 m-2 sm:m-4 flex w-15 h-7 ' 
-                          src={`https://www.themoviedb.org/t/p/original${company.logo_path}`}
-                          alt={`${company.provider_name} logo`} 
-                          /> 
-                           ))
-                ))
-                )) }
                                       
                       {/* {Object.values(watch.results)[0].map((company) => (
                     <img 
@@ -228,7 +211,7 @@ export default function ContentModal({children,media_type,id,poster}) {
                     ))}
                     
                      */}
-                    </span>    
+                  
                      
                   <span>  Genres :  {content.genres.map((genre, index) => (
                       <Chip className=' p-2  m-2   '

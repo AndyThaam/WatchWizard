@@ -5,8 +5,13 @@ import{
     LightningBoltIcon,
     LogoutIcon,
     SearchIcon,
+    LoginIcon
+
 } from "@heroicons/react/outline";
 
+import { signIn, signOut, useSession } from "next-auth/react";
+
+import Link from 'next/link'
 import Image from 'next/image';
 import HeaderItem from "components/HeaderItem";
 import axios from 'axios';
@@ -26,7 +31,10 @@ function Header() {
   const [content, setContent] = useState([]);
 
 
+  const { data: session, status } = useSession();
 
+
+  
   const fetchSearch = async  () => {
     
     try{
@@ -63,18 +71,60 @@ function Header() {
 
          
            
-          
+{/*           
           <div className="flex flex-grow  w-25   max-w-1xl m-3 sm:m-7  ">
           <HeaderItem title="HOME" Icon={HomeIcon} />
-          <div>
-           <HeaderItem  title="TRENDING" Icon={LightningBoltIcon} onClick = {() => router.push('/trending' )} />
-           </div>
+         
           <HeaderItem title="WATCHLIST" Icon={CollectionIcon} />
           <HeaderItem title="PROFILE" Icon={UserIcon} />
-          <HeaderItem title="SIGN OUT" Icon={LogoutIcon} />
-          
-            
-          </div>
+          <HeaderItem title="SIGN OUT" Icon={LogoutIcon} />  
+          </div> */}
+
+
+         <div className="flex flex-grow w-25 max-w-1xl m-3 sm:m-7 justify-end">
+  <HeaderItem title="HOME" Icon={HomeIcon} />
+
+  <Link href="/trending">
+    <a>
+      <HeaderItem title="TRENDING" Icon={LightningBoltIcon} />
+      </a>
+         </Link>
+
+  <Link href="/watchlist">
+    <a>
+  <HeaderItem title="WATCHLIST" Icon={CollectionIcon} />
+  </a>
+  </Link>
+
+  <HeaderItem title="PROFILE" Icon={UserIcon} />
+ 
+    {/* <div onClick={!session ?signIn :signOut}>
+
+        <HeaderItem title="LOGIN" Icon={LoginIcon} />
+     </div>
+     <p>
+      {session ? `Hello  ${session.user.name}` :"Sign In" }
+     
+      </p>
+
+  <div onClick = {signOut}
+  className="ml-auto">
+    <HeaderItem title="SIGN OUT" Icon={LogoutIcon} />
+  </div> */}
+
+{!session ? (
+  <div className="ml-auto"  onClick={signIn}>
+    <HeaderItem title={"SIGN IN"} Icon={LoginIcon} />
+  </div>
+) : (
+  
+  <div className="ml-auto" onClick={signOut}>
+    <HeaderItem  title={`LOGOUT (${session.user.name})`} Icon={LogoutIcon} />
+    <p>Hello {session.user.name}</p>
+  </div>
+)}
+  
+</div>
           
          
           

@@ -29,9 +29,9 @@ const darkTheme = createTheme({
       `https://api.themoviedb.org/3/watch/providers/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&watch_region=FR  `    
      
       );
+      console.log(data ,"watchprov")
       setWatch(data.results)
     
-      console.log(data.results)
     }
       
     useEffect(() => {

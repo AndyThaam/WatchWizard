@@ -98,7 +98,7 @@ function Header() {
 
   <HeaderItem title="PROFILE" Icon={UserIcon} />
  
-    {/* <div onClick={!session ?signIn :signOut}>
+    <div onClick={!session ?signIn :signOut}>
 
         <HeaderItem title="LOGIN" Icon={LoginIcon} />
      </div>
@@ -110,9 +110,9 @@ function Header() {
   <div onClick = {signOut}
   className="ml-auto">
     <HeaderItem title="SIGN OUT" Icon={LogoutIcon} />
-  </div> */}
+  </div>
 
-{!session ? (
+{/* {!session ? (
   <div className="ml-auto"  onClick={signIn}>
     <HeaderItem title={"SIGN IN"} Icon={LoginIcon} />
   </div>
@@ -122,7 +122,7 @@ function Header() {
     <HeaderItem  title={`LOGOUT (${session.user.name})`} Icon={LogoutIcon} />
     <p>Hello {session.user.name}</p>
   </div>
-)}
+)} */}
   
 </div>
           

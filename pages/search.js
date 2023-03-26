@@ -13,7 +13,7 @@ import Index from "../pages/index"
 
 function Search() {
   const [page, setPage] = useState(1);
-  const [numOfPages, setNumOfPages] = useState();
+  const [numOfPages, setnumOfPages] = useState();
   const [ searchText,setSearchText,] = useState("")
   const [content, setContent] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
@@ -79,7 +79,7 @@ function Search() {
   }
     useEffect(() => {
     window.scroll(0,0)
-  
+    fetchSearch()
    },[genreforURL,watchProvider,searchText,page])
   
 
@@ -136,7 +136,7 @@ function Search() {
       vote_average = {c.vote_average}
          /> )} 
       </div>
-      <CustomPagination setPage={setPage} numOfPages={numOfPages}/>
+      <CustomPagination setPage={setPage}  numOfPages={numOfPages}/>
     </div>
     </>
 

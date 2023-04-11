@@ -66,17 +66,17 @@ export default function ContentModal({children,media_type,id,poster}) {
   const fetchData = async () => {
     const mediaType = media_type 
     const { data } = await axios.get(
-      `https://api.themoviedb.org/3/${type ? "tv" : "movie"}/${id}?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
+      `https://api.themoviedb.org/3/${media_type}/${id}?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
 
     );
     setContent(data);
-    console.log(data,"mediadatatest")
+ 
   };
   
   const fetchWatch = async () => {
     const mediaType = media_type 
     const { data } = await axios.get(
-      `https://api.themoviedb.org/3/${type ? "tv" : "movie"}/${id}/watch/providers?api_key=a89d091cb78954f6a26c74461aef889a&watch_region=US&language=en-US&include_adult=false&with_original_language=en`
+      `https://api.themoviedb.org/3/${media_type}/${id}/watch/providers?api_key=a89d091cb78954f6a26c74461aef889a&watch_region=US&language=en-US&include_adult=false&with_original_language=en`
     );
     setWatch(data);
   };
@@ -84,7 +84,7 @@ export default function ContentModal({children,media_type,id,poster}) {
   const fetchVideo = async () => {
     const mediaType = media_type 
     const { data } = await axios.get(
-      `https://api.themoviedb.org/3/${type ? "tv" : "movie"}/${id}/videos?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
+      `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
     );
     setVideo(data.results[0]?.key);
   };

@@ -100,7 +100,7 @@ const fetchTrending= async () => {
   const { data } = await axios.get(
   `https://api.themoviedb.org/3/trending/all/week?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}&with_genres=${genreforURL}}&with_watch_providers=${watchProvider}&watch_region=US`
     );
-    console.log(data , "test13232")
+    console.log(data , "fetchTrending")
     setContent(data.results)
     setNumOfPages(data.total_pages);
   }

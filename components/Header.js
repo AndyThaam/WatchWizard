@@ -1,58 +1,30 @@
 import{
     HomeIcon,
-    UserIcon,
     CollectionIcon,
     LightningBoltIcon,
     LogoutIcon,
-    SearchIcon,
     LoginIcon
 
 } from "@heroicons/react/outline";
 
 import { signIn, signOut, useSession } from "next-auth/react";
-
 import Link from 'next/link'
 import Image from 'next/image';
 import HeaderItem from "components/HeaderItem";
-import axios from 'axios';
-import CustomPagination from '../components/Pagination/CustomPagination.js';
-import SingleContent from '../components/SingleContent/SingleContent.js';
 import React, { useEffect, useState } from 'react'
-import Index from "../pages/index"
 import { useRouter } from 'next/router';
-import Search from "./SearchItem.js";
-import Genre from "components/Genre";
 
 
 function Header() {
-  const [ searchText,setSearchText,] = useState("")
-  const [ numOfPages,setnumOfPages,] = useState()
-  const [page, setPage] = useState(1);
-  const [content, setContent] = useState([]);
-
 
   const { data: session, status } = useSession();
 
-
   
-  const fetchSearch = async  () => {
-    
-    try{
-      const{ data } = await axios.get(
-        `https://api.themoviedb.org/3/search/multi?api_key=a89d091cb78954f6a26c74461aef889a&query=${searchText}&page=${page}`
-        )
-        setContent(data.results)
-        setnumOfPages(data.total_pages)
-      } catch(error) {
-        console.error(error)
-      }
-  }
+  
     useEffect(() => {
-    window.scroll(0,0)
-    fetchSearch()
-   },[page])
+    
+   },[])
 
-  
    const router = useRouter();
 
 
@@ -70,15 +42,6 @@ function Header() {
           </div>
 
          
-           
-{/*           
-          <div className="flex flex-grow  w-25   max-w-1xl m-3 sm:m-7  ">
-          <HeaderItem title="HOME" Icon={HomeIcon} />
-         
-          <HeaderItem title="WATCHLIST" Icon={CollectionIcon} />
-          <HeaderItem title="PROFILE" Icon={UserIcon} />
-          <HeaderItem title="SIGN OUT" Icon={LogoutIcon} />  
-          </div> */}
 
 
          <div className="flex flex-grow w-25 max-w-1xl m-3 sm:m-7 justify-end">
@@ -96,7 +59,7 @@ function Header() {
   </a>
   </Link>
 
-  <HeaderItem title="PROFILE" Icon={UserIcon} />
+  
  
     <div onClick={!session ?signIn :signOut}>
 
@@ -112,27 +75,10 @@ function Header() {
     <HeaderItem title="SIGN OUT" Icon={LogoutIcon} />
   </div>
 
-{/* {!session ? (
-  <div className="ml-auto"  onClick={signIn}>
-    <HeaderItem title={"SIGN IN"} Icon={LoginIcon} />
-  </div>
-) : (
-  
-  <div className="ml-auto" onClick={signOut}>
-    <HeaderItem  title={`LOGOUT (${session.user.name})`} Icon={LogoutIcon} />
-    <p>Hello {session.user.name}</p>
-  </div>
-)} */}
-  
 </div>
-          
-         
-          
-        
+             
       </div>
-      <div>
-    
-      </div>
+      
      
       
       </header>

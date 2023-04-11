@@ -262,7 +262,7 @@
             genreData = await useGenre(selectedGenres);
           } else {
             // Fetch trending movies if no genre is selected
-            genreData = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=a89d091cb78954f6a26c74461aef889a`).then((response) => response.data.results);
+            genreData = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}`).then((response) => response.data.results);
           }
       
           let watchData = [];

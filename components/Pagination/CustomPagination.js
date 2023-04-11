@@ -8,7 +8,7 @@ const darkTheme = createTheme({
     },
   });
   
-  export default function CustomPagination({ setPage, numOfPages = 10 }) {
+  export default function CustomPagination({ setPage, numOfPages =3000 }) {
     // Scroll to top when page changes
     const handlePageChange = (page) => {
       setPage(page)

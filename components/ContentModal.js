@@ -64,33 +64,56 @@ export default function ContentModal({children,media_type,id,poster}) {
   const handleClose = () => setOpen(false);
 
   const fetchData = async () => {
-
+try{
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${media_type}/${id}?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
 
-    );
-    setContent(data);
- 
-  };
+    )
+  setContent(data);
+ }catch (error) {
+  if (error.response && error.response.status === 404) {
+    console.log("Not found");
+  } else {
+    console.log("Error fetching data:", error.message);
+  }
+}
+};
   
   const fetchWatch = async () => {
     
- 
+ try{
 
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${media_type}/${id}/watch/providers?api_key=a89d091cb78954f6a26c74461aef889a&watch_region=US&language=en-US&include_adult=false&with_original_language=en`
     );
     setWatch(data);
-  };
+  }catch (error) {
+    if (error.response && error.response.status === 404) {
+      console.log("Not found");
+    } else {
+      console.log("Error fetching data:", error.message);
+    }
+  }
+};
   
-  const fetchVideo = async () => {
 
+
+  const fetchVideo = async () => {
+try{
 
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
     );
     setVideo(data.results[0]?.key);
-  };
+}
+  catch (error) {
+    if (error.response && error.response.status === 404) {
+      console.log("Not found");
+    } else {
+      console.log("Error fetching data:", error.message);
+    }
+  }
+};
 
   useEffect(() => {
     fetchData()
@@ -114,7 +137,7 @@ export default function ContentModal({children,media_type,id,poster}) {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        className= {classes.Modal}
+        className= {classes.modal}
         open={open}
         onClose={handleClose}
         closeAfterTransition
@@ -196,13 +219,14 @@ export default function ContentModal({children,media_type,id,poster}) {
 
                  
                     <div className={styles.textHead1}>
-                  <span className='flex-row flex sm:flex ' >Companies:{content.production_companies.map((company) => (
+                  <span className='flex-row flex sm:flex ' >Companies:{content.production_companies ? 
+                  content.production_companies.map((company) => (
                     <img
                     className='cursor-pointer flex-row  
                     px-2 m-2 sm:m-4 flex w-15 h-7 ' 
                     src={`https://www.themoviedb.org/t/p/original${company.logo_path}`}
                     alt={`${company.name} logo`} />
-                    ))}
+                    )): null}
                     
                     </span>
 
@@ -219,14 +243,14 @@ export default function ContentModal({children,media_type,id,poster}) {
                      */}
                   
                      
-                  <span>  Genres :  {content.genres.map((genre, index) => (
+                  <span>  Genres :  {content.genres ?content.genres.map((genre, index) => (
                       <Chip className=' p-2  m-2   '
                         label={genre.name}
                         variant="filled"
                         color="primary"
                         key={index}
                       />
-                    ))} </span> 
+                    )):null} </span> 
                      </div>
                  
                  <div>

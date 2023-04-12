@@ -37,7 +37,7 @@ function Search() {
       );
       setContent(data.results);
       setNumOfPages(data.total_pages);
-      // console.log(data);
+       console.log(data ,"content");
     } catch (error) {
       console.error(error);
     }
@@ -93,7 +93,7 @@ function Search() {
       poster = {c.poster_path} 
       title = {c.title || c.name} 
       date = {c.first_air_date|| c.release_date}
-      media_type = {type ?  "tv":"movie"} 
+      media_type = {c.media_type} 
       vote_average = {c.vote_average}
          /> )} 
       </div>

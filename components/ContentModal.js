@@ -64,7 +64,7 @@ export default function ContentModal({children,media_type,id,poster}) {
   const handleClose = () => setOpen(false);
 
   const fetchData = async () => {
-    const mediaType = media_type 
+
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${media_type}/${id}?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
 
@@ -74,7 +74,9 @@ export default function ContentModal({children,media_type,id,poster}) {
   };
   
   const fetchWatch = async () => {
-    const mediaType = media_type 
+    
+ 
+
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${media_type}/${id}/watch/providers?api_key=a89d091cb78954f6a26c74461aef889a&watch_region=US&language=en-US&include_adult=false&with_original_language=en`
     );
@@ -82,7 +84,8 @@ export default function ContentModal({children,media_type,id,poster}) {
   };
   
   const fetchVideo = async () => {
-    const mediaType = media_type 
+
+
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US`
     );

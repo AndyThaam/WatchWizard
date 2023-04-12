@@ -25,39 +25,9 @@ function Search() {
 
   useEffect(() => {
     window.scroll(0,0)
-    if (selectedWatch.length > 0) {
-      const watchIds = selectedWatch.map((g) => g.provider_id);
-      const requests = watchIds.map((watchId) => {
-        return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchId}&watch_region=US`)
-      });
-
-      Promise.all(requests)
-      .then((responses) => {
-        const combinedData = [];
-
-        responses.forEach((response, index) => {
-          const watchProvider = selectedWatch.find((watch) => watch.provider_id === watchIds[index]);
-
-          const data = response.data;
-          data.results.forEach((movie) => {
-            // add watch provider name to each movie object
-            movie.watch_provider = watchProvider.name;
-          });
-
-          // do something with the data, such as combining it into one array
-          combinedData.push(...data.results)
-          combinedData.sort((a, b) => b.popularity - a.popularity);
-        });
-
-        setContent(combinedData);
-        console.log(combinedData, "combined");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    } else {
+   
       fetchSearch();
-    }
+    
   }, [genreforURL, selectedWatch, searchText, page]);
 
   const fetchSearch = async () => {

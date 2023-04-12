@@ -2,8 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import SingleContent from '../components/SingleContent/SingleContent.js';
 import CustomPagination from '../components/Pagination/CustomPagination';
-import{ SearchIcon,
-} from "@heroicons/react/outline";
+import { SearchIcon } from "@heroicons/react/outline";
 
 import Genre from "components/Genre";
 import useGenre from "hooks/useGenre.js";
@@ -13,73 +12,53 @@ import Index from "../pages/index"
 
 function Search() {
   const [type, setType] = useState(0);
-
   const [page, setPage] = useState(1);
-  const [numOfPages, setnumOfPages] = useState();
-  const [searchText,setSearchText,] = useState("")
+  const [numOfPages, setNumOfPages] = useState();
+  const [searchText, setSearchText] = useState("");
   const [content, setContent] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [genres, setGenres] = useState([]);
-
-  const genreforURL = useGenre(selectedGenres)
-
   const [watches, setWatch] = useState([]);
   const [selectedWatch, setSelectedWatch] = useState([]);
 
+  const genreforURL = useGenre(selectedGenres);
 
-  const useWatch = (selectedWatch) => {
-    if (selectedWatch.length < 1) return "";
-  
-    const watchIds = selectedWatch.map((g) => g.provider_id);
-    const requests = watchIds.map((watchId) => {
-      return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchId}&watch_region=US`)
-    });
-
-    Promise.all(requests)
-  .then((responses) => {
-    const combinedData = [];
-
-    responses.forEach((response, index) => {
-      const watchProvider = selectedWatch.find((watch) => watch.provider_id === watchIds[index]);
-
-      const data = response.data;
-      data.results.forEach((movie) => {
-        // add watch provider name to each movie object
-        movie.watch_provider = watchProvider.name;
+  useEffect(() => {
+    window.scroll(0,0)
+    if (selectedWatch.length > 0) {
+      const watchIds = selectedWatch.map((g) => g.provider_id);
+      const requests = watchIds.map((watchId) => {
+        return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchId}&watch_region=US`)
       });
 
-      // do something with the data, such as combining it into one array
-      combinedData.push(...data.results)
-      combinedData.sort((a, b) => b.popularity - a.popularity);
-      setContent(combinedData)
-      
+      Promise.all(requests)
+      .then((responses) => {
+        const combinedData = [];
 
-    });
+        responses.forEach((response, index) => {
+          const watchProvider = selectedWatch.find((watch) => watch.provider_id === watchIds[index]);
 
-    console.log(combinedData, "combined");
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-  };
+          const data = response.data;
+          data.results.forEach((movie) => {
+            // add watch provider name to each movie object
+            movie.watch_provider = watchProvider.name;
+          });
 
-  
-  const watchProvider = useWatch(selectedWatch);
+          // do something with the data, such as combining it into one array
+          combinedData.push(...data.results)
+          combinedData.sort((a, b) => b.popularity - a.popularity);
+        });
 
-
-  // const fetchSearch = async  () => {
-  //   try{
-  //     const{ data } = await axios.get(
-  //       `https://api.themoviedb.org/3/search/multi?api_key=a89d091cb78954f6a26c74461aef889a&query=${searchText}&page=${page}&with_genres=${genreforURL}&with_watch_providers=${watchProvider}&watch_region=US`
-  //       )
-  //       console.log(data,"search")
-  //       setContent(data.results)
-  //       setnumOfPages(data.total_pages)
-  //       setSearchText(data.searchText)
-  //     } catch(error) {
-  //       console.error(error)
-  //     }
-  // }
+        setContent(combinedData);
+        console.log(combinedData, "combined");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    } else {
+      fetchSearch();
+    }
+  }, [genreforURL, selectedWatch, searchText, page]);
 
   const fetchSearch = async () => {
     try {
@@ -92,14 +71,8 @@ function Search() {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  
-    useEffect(() => {
-    window.scroll(0,0)
-  
-   },[genreforURL,watchProvider,searchText,page])
-  
 
   return (
     <> <Index /> 

@@ -19,7 +19,7 @@ const Carousel = ({ id, media_type }) => {
         onDragStart={handleDragStart}
         className={styles.carouselItem__img}
       />
-      <b className={styles.carouselItem__txt}>{c?.name}</b>
+      <b className={styles.carouselItem__txt}>{c.title ? c.title : c.name}</b>
     </div>
   ));
 

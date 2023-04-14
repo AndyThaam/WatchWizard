@@ -18,7 +18,7 @@ const FCarousel = ({ id, media_type }) => {
         onDragStart={handleDragStart}
         className={styles.FcarouselItem__img}
       />
-      <b className={styles.carouselItem__txt}>{c?.title}</b>
+      <b className={styles.carouselItem__txt}>{c.title ? c.title : c.name }</b>
     </div>
   ));
 

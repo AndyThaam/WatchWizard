@@ -186,69 +186,75 @@
     const [selectedWatch, setSelectedWatch] = useState([]);
     const [numOfResults, setNumOfResults] = useState(0);
 
-      const useWatch = (selectedWatch, genreId1 = '') => {
-        if (selectedWatch.length < 1) return "";
+    const useWatch = (selectedWatch, genreId1 = [""] ) => {
+      if (selectedWatch.length < 1) return "";
+    
+      const watchIds = selectedWatch.map((g) => g.provider_id);
+        
+      const requests = []
+      genreId1.forEach((genreId) => {
+        const genreRequests = watchIds.map((watchId) => {
+          return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreId}&with_watch_providers=${watchId}&watch_region=US`)
+        })
+        requests.push(...genreRequests)
+      });
       
-        const watchIds = selectedWatch.map((g) => g.provider_id);
-
-        const requests = watchIds.map((watchId1) => {
-          return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreId1}&with_watch_providers=${watchId}&watch_region=US`)
+      console.log(requests, "movie data");
+      return Promise.all(requests).then((responses) => {
+        const combinedData = [];
+        let totalPages = 1;
+    
+        responses.forEach((response) => {
+          const data = response.data;
+          totalPages = data.total_pages;
+          combinedData.push(...data.results)
+          combinedData.sort((a, b) => b.popularity - a.popularity);
         });
-      
-        console.log(requests, "movie data");
-        return Promise.all(requests).then((responses) => {
-          const combinedData = [];
-      
-          responses.forEach((response) => {
-          
-      
-            const data = response.data;
-           
-      
-            // do something with the data, such as combining it into one array
-            combinedData.push(...data.results)
-            combinedData.sort((a, b) => b.popularity - a.popularity);
+    
+        // remove duplicates
+        const uniqueData = Array.from(new Set(combinedData.map(movie => movie.id)))
+          .map(id => {
+            return combinedData.find(movie => movie.id === id)
           });
-      
-          // remove duplicates
-          const uniqueData = Array.from(new Set(combinedData.map(movie => movie.id)))
-            .map(id => {
-              return combinedData.find(movie => movie.id === id)
-            });
-      
-          return uniqueData;
-        }).catch((error) => {
-          console.error(error);
-        });
-      };
+    
+        setNumOfPages(totalPages);
+        console.log("total",totalPages)
+        return shuffle(uniqueData);
+      }).catch((error) => {
+        console.error(error);
+      });
+    };
+  
       const useGenre = (selectedGenres) => {
         if (selectedGenres.length < 1) return "";
-
+    
         const genreIDS = selectedGenres.map((g) => g.id);
         
         const requests = genreIDS.map((genreID) => {
           return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}`)
         });
-
+    
         return Promise.all(requests).then((responses) => {
           const combinedData = [];
-
+          let totalPages = 1;
+    
           responses.forEach((response) => {
-       
-
             const data = response.data;
+            totalPages = data.total_pages;
+    
            
-
+    
             // do something with the data, such as combining it into one array
             combinedData.push(...data.results)
             combinedData.sort((a, b) => b.popularity - a.popularity);
           });
-
+    
           const uniqueData = Array.from(new Set(combinedData.map(movie => movie.id)))
           .map(id => {
             return combinedData.find(movie => movie.id === id)
           });
-
+        setNumOfPages(totalPages);
+    
           return uniqueData;
         }).catch((error) => {
           console.error(error);
@@ -267,8 +273,7 @@ useEffect(() => {
       // Only selected genres
       genreData = await useGenre(selectedGenres);
       setContent(genreData);
-      setNumOfPages(genreData.total_pages);
-      console.log("test1")
+       console.log("test1")
 
     } else if (selectedGenres.length > 0 && selectedWatch.length > 0) {
       // Both genres and watch providers selected
@@ -277,11 +282,10 @@ useEffect(() => {
      watchData = await useWatch(selectedWatch, genreId1);
       
       setContent(shuffle(watchData));
-      setNumOfPages(watchData.total_pages);
-
+ 
       console.log("test2")
       console.log( watchData,"data  ")
-      console.log( genreId,"genre id  ")
+      console.log( genreId1,"genre id  ")
       console.log(selectedGenres.length,"selected gen length  ")
       console.log(selectedGenres,"selected gen ")
       console.log(selectedWatch," streams ")
@@ -291,24 +295,25 @@ useEffect(() => {
       watchData = await useWatch(selectedWatch);
       
       setContent(watchData);
-      setNumOfPages(watchData.total_pages);
-       
+        
         console.log("test4")
 
 
     }  else {
       // Default case - fetch trending movies
-      genreData = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}`).then((response) => response.data.results);
-      setContent(shuffle(genreData));
-      setNumOfPages(genreData.total_pages);
-      console.log("test3")
-      console.log(selectedGenres.length ," g l ")
-
-      console.log(selectedWatch.length ," W l ")
+      const response = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}`);
+      const { results, total_pages } = response.data;
+      setContent(shuffle(results));
+      setNumOfPages(total_pages);
+      console.log(results, "test3");
+      console.log(selectedGenres.length, " g l ");
+      console.log(total_pages, " g page ");
+      console.log(selectedWatch.length, " W l ");
     }
   };
 
   fetchMovies();
+  
 }, [page, selectedGenres, selectedWatch]);
 
   return (

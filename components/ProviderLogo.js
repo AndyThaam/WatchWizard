@@ -26,7 +26,7 @@ const darkTheme = createTheme({
        const fetchLogos = async () => {
     const {data} = await axios.get (
       
-      `https://api.themoviedb.org/3/watch/providers/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&watch_region=FR  `    
+      `https://api.themoviedb.org/3/watch/providers/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&watch_region=FR  `    
      
       );
       console.log(data ,"watchprov")

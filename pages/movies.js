@@ -198,14 +198,11 @@
         return Promise.all(requests).then((responses) => {
           const combinedData = [];
       
-          responses.forEach((response, index) => {
-            const watchProvider = selectedWatch.find((watch) => watch.provider_id === watchIds[index]);
+          responses.forEach((response) => {
+          
       
             const data = response.data;
-            data.results.forEach((movie) => {
-              // add watch provider name to each movie object
-              movie.watch_provider = watchProvider.name;
-            });
+           
       
             // do something with the data, such as combining it into one array
             combinedData.push(...data.results)
@@ -227,6 +224,7 @@
         if (selectedGenres.length < 1) return "";
 
         const genreIDS = selectedGenres.map((g) => g.id);
+        
         const requests = genreIDS.map((genreID) => {
           return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}`)
         });
@@ -234,14 +232,11 @@
         return Promise.all(requests).then((responses) => {
           const combinedData = [];
 
-          responses.forEach((response, index) => {
-            const genreforURL = selectedGenres.find((title) => title.id === genreIDS[index]);
+          responses.forEach((response) => {
+       
 
             const data = response.data;
-            data.results.forEach((movie) => {
-              // add genre name to each movie object
-              movie.genre = genreforURL.name;
-            });
+           
 
             // do something with the data, such as combining it into one array
             combinedData.push(...data.results)
@@ -255,30 +250,60 @@
       };
      
 
-      useEffect(() => {
-        const fetchMovies = async () => {
-          let genreData = [];
-          if (selectedGenres.length > 0) {
-            genreData = await useGenre(selectedGenres);
-          } else {
-            // Fetch trending movies if no genre is selected
-            genreData = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}`).then((response) => response.data.results);
-          }
       
-          let watchData = [];
-          if (selectedWatch.length > 0) {
-            const genreId = genreData.length > 0 ? genreData[0].genre_ids[0] : '';
-            watchData = await useWatch(selectedWatch, genreId);
-            console.log(watchData, "WW")
-          }
+useEffect(() => {
+  const fetchMovies = async () => {
+    let genreData = [];
+    let watchData = [];
+    const genreIDS = selectedGenres.map((g) => g.id);
+
+    if (selectedGenres.length > 0 && selectedWatch.length === 0) {
+      // Only selected genres
+      genreData = await useGenre(selectedGenres);
+      setContent(genreData);
+      setNumOfPages(genreData.total_pages);
+      console.log("test1")
+
+    } else if (selectedGenres.length > 0 && selectedWatch.length > 0) {
+      // Both genres and watch providers selected
+      const genreId = selectedGenres.length > 0 ? selectedGenres[0].id : '';
+      watchData = await useWatch(selectedWatch, genreId);
       
-          const content = watchData.length > 0 ? shuffle(watchData) : shuffle(genreData);
-          setContent(content);
-          setNumOfPages(content.total_pages);
-        };
+      setContent(watchData);
+      setNumOfPages(watchData.total_pages);
+
+      console.log("test2")
+      console.log( watchData,"data  ")
+      console.log( genreId,"genre id  ")
+      console.log(selectedGenres.length,"selected gen length  ")
+      console.log(selectedGenres[0],"selected gen length  2w ")
+      console.log(selectedWatch," streams ")
+
+    }
+     else if (selectedGenres.length === 0 && selectedWatch.length > 0 ) {
+      watchData = await useWatch(selectedWatch);
       
-        fetchMovies();
-      }, [page, selectedGenres, selectedWatch]);
+      setContent(watchData);
+      setNumOfPages(watchData.total_pages);
+       
+        console.log("test4")
+
+
+    }  else {
+      // Default case - fetch trending movies
+      genreData = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}`).then((response) => response.data.results);
+      setContent(shuffle(genreData));
+      setNumOfPages(genreData.total_pages);
+      console.log("test3")
+      console.log(selectedGenres.length ," g l ")
+
+      console.log(selectedWatch.length ," W l ")
+    }
+  };
+
+  fetchMovies();
+}, [page, selectedGenres, selectedWatch]);
+
   return (
     <> 
     <Index />

@@ -48,6 +48,7 @@ const useWatch = (selectedWatch) => {
     data.results.forEach((movie) => {
       // add watch provider name to each movie object
       movie.watch_provider = watchProvider.name;
+      console.log(watchProvider.name ,"test")
     });
 
     // do something with the data, such as combining it into one array

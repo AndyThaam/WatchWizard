@@ -186,12 +186,13 @@
     const [selectedWatch, setSelectedWatch] = useState([]);
     const [numOfResults, setNumOfResults] = useState(0);
 
-      const useWatch = (selectedWatch, genreId = '') => {
+      const useWatch = (selectedWatch, genreId1 = '') => {
         if (selectedWatch.length < 1) return "";
       
         const watchIds = selectedWatch.map((g) => g.provider_id);
-        const requests = watchIds.map((watchId) => {
-          return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreId}&with_watch_providers=${watchId}&watch_region=US`)
+
+        const requests = watchIds.map((watchId1) => {
+          return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreId1}&with_watch_providers=${watchId}&watch_region=US`)
         });
       
         console.log(requests, "movie data");
@@ -243,7 +244,12 @@
             combinedData.sort((a, b) => b.popularity - a.popularity);
           });
 
-          return combinedData;
+          const uniqueData = Array.from(new Set(combinedData.map(movie => movie.id)))
+          .map(id => {
+            return combinedData.find(movie => movie.id === id)
+          });
+
+          return uniqueData;
         }).catch((error) => {
           console.error(error);
         });
@@ -266,17 +272,18 @@ useEffect(() => {
 
     } else if (selectedGenres.length > 0 && selectedWatch.length > 0) {
       // Both genres and watch providers selected
-      const genreId = selectedGenres.length > 0 ? selectedGenres[0].id : '';
-      watchData = await useWatch(selectedWatch, genreId);
+      const genreId1 = selectedGenres.map((g) => g.id);
+       const genreId = selectedGenres.length > 0 ? selectedGenres.id : '';
+     watchData = await useWatch(selectedWatch, genreId1);
       
-      setContent(watchData);
+      setContent(shuffle(watchData));
       setNumOfPages(watchData.total_pages);
 
       console.log("test2")
       console.log( watchData,"data  ")
       console.log( genreId,"genre id  ")
       console.log(selectedGenres.length,"selected gen length  ")
-      console.log(selectedGenres[0],"selected gen length  2w ")
+      console.log(selectedGenres,"selected gen ")
       console.log(selectedWatch," streams ")
 
     }

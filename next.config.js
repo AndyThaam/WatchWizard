@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   images: {
-    domains: ["image.tmdb.org", "www.freepnglogos.com"],
+    domains: ["image.tmdb.org", "ibb.co", "i.ibb.co"],
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Add the path to the redux folder to the list of modules that webpack will resolve

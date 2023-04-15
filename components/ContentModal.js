@@ -70,6 +70,8 @@ try{
 
     )
   setContent(data);
+  console.log(data)
+
  }catch (error) {
   if (error.response && error.response.status === 404) {
     console.log("Not found");
@@ -155,12 +157,15 @@ try{
           
               <div className={styles.ContentModal}>
               <span>
-              { <img src = {content.poster_path
+
+
+              { <img 
+              src = {content.poster_path
                       ? `${img_500}/${content.poster_path}`
                       : unavailable
                   }
                   alt={content.name || content.title}
-                  className={styles.ContentModal__portrait}
+                  className=  {styles.ContentModal__portrait}
                   
                 /> }
                 
@@ -176,12 +181,16 @@ try{
                 />
 
                 
-                      <span className='m-2.5'> 
-                        Rating : 
-                        <CircularRate className='p-4'
-                         value={content.vote_average} />
-                         </span>
-           
+                      <div className='m-3 '> 
+                      <h2 className={styles.textHead}> 
+                       Vote Average :
+                        <CircularRate className='p-6 m-2'
+                         value={content.vote_average} /></h2>                    
+                      
+                          
+                         
+                         </div>
+                       
                   <Button
                   className='m-2.5'
                     startIcon={<YouTubeIcon />}
@@ -192,6 +201,7 @@ try{
                     Watch the Trailer
                   </Button>
               
+                  
                  </span>
                 
 
@@ -210,7 +220,8 @@ try{
                   </span>
                   
                   {content.tagline && (
-                    <i className={styles.tagline}>{content.tagline}</i>
+                    <i className={styles.tagline}>
+                      {content.tagline}</i>
                   )}
 
                   <span className={styles.ContentModal__description}>

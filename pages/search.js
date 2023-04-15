@@ -31,14 +31,14 @@ const useWatch = (selectedWatch, genreId1 = [""] ) => {
   const requests = []
   genreId1.forEach((genreId) => {
     const genreRequests = watchIds.map((watchId) => {
-      return axios.get(`https://api.themoviedb.org/3/search/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreId}&with_watch_providers=${watchId}&watch_region=US&media_type=movie&query=${searchText}`)
+      return axios.get(`https://api.themoviedb.org/3/search/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&include_adult=false&include_video=false&page=${page}&with_genres=${genreId}&with_watch_providers=${watchId}&watch_region=US&media_type=movie&query=${searchText}`)
     })
     requests.push(...genreRequests)
   });
 
   genreId1.forEach((genreId) => {
     const tvgenreRequests = watchIds.map((watchId) => {
-      return axios.get(`https://api.themoviedb.org/3/search/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreId}&with_watch_providers=${watchId}&watch_region=US&media_type=tv&query=${searchText}`)
+      return axios.get(`https://api.themoviedb.org/3/search/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&include_adult=false&include_video=false&page=${page}&with_genres=${genreId}&with_watch_providers=${watchId}&watch_region=US&media_type=tv&query=${searchText}`)
     })
     requests.push(...tvgenreRequests)
   });
@@ -79,7 +79,7 @@ const useWatch = (selectedWatch, genreId1 = [""] ) => {
 
     setNumOfPages(totalPages);
     console.log("total",totalPages)
-    return shuffle(uniqueData);
+    return uniqueData;
   }).catch((error) => {
     console.error(error);
   });
@@ -90,12 +90,12 @@ const useWatch = (selectedWatch, genreId1 = [""] ) => {
     const genreIDS = selectedGenres.map((g) => g.id);
 
     const requests = genreIDS.map((genreID) => {
-      return axios.get(`https://api.themoviedb.org/3/search/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=movie&query=${searchText}`)
+      return axios.get(`https://api.themoviedb.org/3/search/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=movie&query=${searchText}&media_type=movie`)
     });
   
   
     const tvrequests = genreIDS.map((genreID) => {
-      return axios.get(`https://api.themoviedb.org/3/search/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=tv&query=${searchText}`)
+      return axios.get(`https://api.themoviedb.org/3/search/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=tv&query=${searchText}&media_type=tv`)
     });
   
     
@@ -109,17 +109,25 @@ const useWatch = (selectedWatch, genreId1 = [""] ) => {
     
       responses.forEach((response) => {
         const data = response.data;
-        console.log(data, "usetests")
         totalPages = data.total_pages;
-
-       
-
+      
+        // add a media_type property to each result based on the response URL
+        const resultsWithMediaType = data.results.map(result => {
+          if (response.config.url.includes('/movie')) {
+            return { ...result, media_type: 'movie' };
+          } else if (response.config.url.includes('/tv')) {
+            return { ...result, media_type: 'tv' };
+          } else {
+            return result;
+          }
+        });
+      
         // do something with the data, such as combining it into one array
-        combinedData.push(...data.results)
+        combinedData.push(...resultsWithMediaType);
         combinedData.sort((a, b) => b.popularity - a.popularity);
       });
       
-      console.log(combinedData);
+      console.log(combinedData , "test2323232 ");
       console.log(data.media_type)
 
       const uniqueData = Array.from(new Set(combinedData.map(movie => movie.id)))
@@ -181,8 +189,8 @@ const useWatch = (selectedWatch, genreId1 = [""] ) => {
     }  else {
       // Default case - fetch trending movies
     let combinedArray = [] 
-      const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}&query=${searchText}`);
-      const tvResponse = await axios.get(`https://api.themoviedb.org/3/search/tv?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}&query=${searchText}`);
+      const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}&query=${searchText}&media_type=movie`);
+      const tvResponse = await axios.get(`https://api.themoviedb.org/3/search/tv?api_key=a89d091cb78954f6a26c74461aef889a&page=${page}&query=${searchText}&media_type=tv`);
      
     combinedArray.push(...response.data.results, ...tvResponse.data.results)
     

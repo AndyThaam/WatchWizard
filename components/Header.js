@@ -4,7 +4,6 @@ import{
     LightningBoltIcon,
     LogoutIcon,
     LoginIcon
-
 } from "@heroicons/react/outline";
 
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -32,13 +31,14 @@ function Header() {
     <>
     <header className="flex flex-col   "> 
 
+    
           
           < div className='sm:flex  '>
 
-          <div className='flex  cursor-pointer justify-center px-5 md:w-125  sm:h-30 ' onClick = {() => router.push('/trending' )} >
+          <div className='flex  cursor-pointer justify-center px-5 m-5 md:w-125  sm:h-30 ' onClick = {() => router.push('/trending' )} >
           <Image className="flex  justify-center"
-          src = "https://www.freepnglogos.com/uploads/film-reel-png/film-reel-file-filmreel-icon-svg-wikipedia-21.png"  
-          alt="film reel the movies owens valley"  width ={140} height ={40} />
+        src="https://i.ibb.co/Lvcf5VS/logo.png"
+          alt="film reel the movies owens valley"  width ={150  } height ={40} />
           </div>
 
          

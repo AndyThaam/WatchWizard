@@ -58,6 +58,7 @@ const FCarousel = ({ id, media_type }) => {
       responsive={responsive}
       items={items}
       autoPlay
+      autoPlaySpeed={1000}
     />
   );
 };

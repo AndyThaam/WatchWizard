@@ -124,14 +124,16 @@ const useWatch = (selectedWatch, genreId1 = [""] ) => {
         combinedData.push(...resultsWithMediaType);
         combinedData.sort((a, b) => b.popularity - a.popularity);
       });
+  
       
-      console.log(combinedData);
-      console.log(data.media_type)
 
       const uniqueData = Array.from(new Set(combinedData.map(movie => movie.id)))
       .map(id => {
         return combinedData.find(movie => movie.id === id)
       });
+      console.log(combinedData,"comb data genre");
+      console.log(uniqueData,"uni genre");
+
     setNumOfPages(totalPages);
 
     return shuffle(uniqueData);

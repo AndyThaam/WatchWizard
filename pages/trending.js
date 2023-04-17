@@ -184,7 +184,8 @@ if (selectedGenres.length > 0 && selectedWatch.length === 0) {
 
     setNumOfPages(totalPages);
 
-    return shuffle(uniqueData);
+    setContent(shuffle(uniqueData));
+
     }).catch((error) => {
       console.error(error);
     });

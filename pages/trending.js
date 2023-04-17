@@ -144,45 +144,58 @@ const genreId1 = selectedGenres.map((g) => g.id);
 if (selectedGenres.length > 0 && selectedWatch.length === 0) {
   // Only selected genres
   const genreIDS = selectedGenres.map((g) => g.id);
-
+console.log(genreIDS,"start")
     const requests = genreIDS.map((genreID) => {
-      return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=movie`)
+      return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}`)
     });
     
     
     const tvrequests = genreIDS.map((genreID) => {
-      return axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=tv`)
+      return axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}`)
     });
   
     
-    console.log(requests, "movie data");
+    console.log(requests, "movie datsasasasa");
     const allRequests = [...requests, ...tvrequests];
+    console.log(allRequests,"test3");
+
+
 
     return Promise.all(allRequests).then((responses) => {
       const combinedData = [];
       let totalPages = 1;
 
+
+      console.log(requests, "movie data");
+
       responses.forEach((response) => {
         const data = response.data;
         totalPages = data.total_pages;
 
-       
+        console.log(data,"test4");
 
         // do something with the data, such as combining it into one array
         combinedData.push(...data.results)
         combinedData.sort((a, b) => b.popularity - a.popularity);
       });
-      
-        console.log(data.media_type)  
+              console.log(combinedData,"test5");
+     
+        console.log("test2");
 
       const uniqueData = Array.from(new Set(combinedData.map(movie => movie.id)))
       .map(id => {
         return combinedData.find(movie => movie.id === id)
       });
+console.log(uniqueData);
+      console.log("test1");
+
+
       console.log(combinedData,"comb data genre");
       console.log(uniqueData,"uni genre");
 
     setNumOfPages(totalPages);
+    console.log(uniqueData, "mqwqweqwqsovie data");
+
 
     setContent(shuffle(uniqueData));
 

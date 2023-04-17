@@ -91,8 +91,8 @@ const useWatch = (selectedWatch, genreId1 = [""] ) => {
     const requests = genreIDS.map((genreID) => {
       return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=movie`)
     });
-  
-  
+    
+    
     const tvrequests = genreIDS.map((genreID) => {
       return axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=tv`)
     });
@@ -143,15 +143,51 @@ const genreId1 = selectedGenres.map((g) => g.id);
 
 if (selectedGenres.length > 0 && selectedWatch.length === 0) {
   // Only selected genres
-  genreData = await useGenre(selectedGenres);
-  setContent(genreData);
-   console.log("test1")
-   console.log( genreData,"data  ")
-  console.log( genreId1,"genre id  ")
-  console.log(selectedGenres.length,"selected gen length  ")
-  console.log(selectedGenres,"selected gen ")
-  console.log(selectedWatch," streams ")
+  const genreIDS = selectedGenres.map((g) => g.id);
 
+    const requests = genreIDS.map((genreID) => {
+      return axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=movie`)
+    });
+    
+    
+    const tvrequests = genreIDS.map((genreID) => {
+      return axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=a89d091cb78954f6a26c74461aef889a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreID}&media_type=tv`)
+    });
+  
+    
+    console.log(requests, "movie data");
+    const allRequests = [...requests, ...tvrequests];
+
+    return Promise.all(allRequests).then((responses) => {
+      const combinedData = [];
+      let totalPages = 1;
+
+      responses.forEach((response) => {
+        const data = response.data;
+        totalPages = data.total_pages;
+
+       
+
+        // do something with the data, such as combining it into one array
+        combinedData.push(...data.results)
+        combinedData.sort((a, b) => b.popularity - a.popularity);
+      });
+      
+        console.log(data.media_type)  
+
+      const uniqueData = Array.from(new Set(combinedData.map(movie => movie.id)))
+      .map(id => {
+        return combinedData.find(movie => movie.id === id)
+      });
+      console.log(combinedData,"comb data genre");
+      console.log(uniqueData,"uni genre");
+
+    setNumOfPages(totalPages);
+
+    return shuffle(uniqueData);
+    }).catch((error) => {
+      console.error(error);
+    });
 
 
 } else if (selectedGenres.length > 0 && selectedWatch.length > 0) {

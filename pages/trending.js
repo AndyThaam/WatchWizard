@@ -108,24 +108,15 @@ const useWatch = (selectedWatch, genreId1 = [""] ) => {
       responses.forEach((response) => {
         const data = response.data;
         totalPages = data.total_pages;
-      
-        // add a media_type property to each result based on the response URL
-        const resultsWithMediaType = data.results.map(result => {
-          if (response.config.url.includes('/movie')) {
-            return { ...result, media_type: 'movie' };
-          } else if (response.config.url.includes('/tv')) {
-            return { ...result, media_type: 'tv' };
-          } else {
-            return result;
-          }
-        });
-      
+
+       
+
         // do something with the data, such as combining it into one array
-        combinedData.push(...resultsWithMediaType);
+        combinedData.push(...data.results)
         combinedData.sort((a, b) => b.popularity - a.popularity);
       });
-  
       
+        console.log(data.media_type)  
 
       const uniqueData = Array.from(new Set(combinedData.map(movie => movie.id)))
       .map(id => {

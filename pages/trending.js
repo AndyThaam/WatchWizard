@@ -172,10 +172,20 @@ console.log(genreIDS,"start")
         const data = response.data;
         totalPages = data.total_pages;
 
+
+        const resultsWithMediaType = data.results.map(result => {
+          if (response.config.url.includes('/movie')) {
+            return { ...result, media_type: 'movie' };
+          } else if (response.config.url.includes('/tv')) {
+            return { ...result, media_type: 'tv' };
+          } else {
+            return result;
+          }
+        });
         console.log(data,"test4");
 
         // do something with the data, such as combining it into one array
-        combinedData.push(...data.results)
+        combinedData.push(...resultsWithMediaType)
         combinedData.sort((a, b) => b.popularity - a.popularity);
       });
               console.log(combinedData,"test5");
